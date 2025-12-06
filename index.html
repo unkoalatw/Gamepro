@@ -51,6 +51,7 @@
             align-items: center;
             justify-content: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer; /* 強制手指游標 */
         }
         .neu-btn:hover {
             color: var(--accent);
@@ -104,10 +105,10 @@
             text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
         }
         
-        /* 修正下拉選單選項顏色 */
+        /* 修正下拉選單選項顏色：強制白色 */
         select option {
             background-color: #292d3e;
-            color: #e0e6ed;
+            color: #ffffff; 
         }
     </style>
 </head>
@@ -265,8 +266,14 @@
 
     <!-- Order Hub (Full Screen) -->
     <div id="orderHub" class="fixed inset-0 z-50 hidden overflow-y-auto" style="background: var(--bg-base);">
+        <!-- 關閉按鈕 -->
         <button onclick="closeOrderHub()" class="absolute top-6 right-6 z-50 w-12 h-12 rounded-full neu-btn text-gray-400 hover:text-red-400"><i class="fa-solid fa-xmark text-xl"></i></button>
         
+        <!-- 開啟通知按鈕 -->
+        <button id="enableNotifyBtn" onclick="enableNotifications()" class="absolute top-6 right-20 z-50 neu-btn px-4 h-12 text-sm text-yellow-400 hidden hover:text-yellow-300">
+            <i class="fa-solid fa-bell mr-2"></i> 開啟通知
+        </button>
+
         <div class="min-h-screen flex flex-col items-center justify-center p-4">
             <!-- Search -->
             <div id="hubSearch" class="w-full max-w-md text-center space-y-8 animate-fade-in">
@@ -356,10 +363,35 @@
 
         function requestNotificationPermission() {
             if (!("Notification" in window)) return;
-            if (Notification.permission === "default") Notification.requestPermission();
+            
+            const btn = document.getElementById('enableNotifyBtn');
+            if (Notification.permission === 'default') {
+                btn.classList.remove('hidden'); 
+            } else {
+                btn.classList.add('hidden'); 
+            }
         }
+
+        function enableNotifications() {
+            if (!("Notification" in window)) {
+                alert("您的瀏覽器不支援通知功能");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("通知已開啟！");
+                    sendNotification("測試", "通知功能正常運作中");
+                } else {
+                    alert("通知被拒絕，請至瀏覽器設定開啟");
+                }
+                requestNotificationPermission();
+            });
+        }
+
         function sendNotification(title, body) {
-            if (Notification.permission === "granted") new Notification(title, { body: body, icon: "https://cdn-icons-png.flaticon.com/512/3225/3225132.png" });
+            if (Notification.permission === "granted") {
+                new Notification(title, { body: body, icon: "https://cdn-icons-png.flaticon.com/512/3225/3225132.png" });
+            }
         }
 
         function fetchGames() {
@@ -376,7 +408,6 @@
         function renderGames(data) {
             allGames = data;
             const sel = document.getElementById('gameSelect');
-            // ★ 修正：移除 text-gray-800，讓文字顏色跟隨 CSS 變數
             sel.innerHTML = data.length ? data.map(g => `<option value="${g.id}">${g.name}</option>`).join('') : '<option value="">無遊戲</option>';
             onGameChange(); 
         }
@@ -579,7 +610,9 @@
 
         function openOrderHub(id="") { 
             document.getElementById('orderHub').classList.remove('hidden'); 
+            
             requestNotificationPermission();
+
             if(id) { 
                 document.getElementById('hubSearch').classList.add('hidden'); 
                 document.getElementById('hubResult').classList.remove('hidden'); 
@@ -626,13 +659,11 @@
             if(price && price > 0) priceDisplay.innerText = `$${price}`;
             else priceDisplay.innerText = "待管理員報價";
 
-            // ★ 修正：重置圖示樣式，避免顏色衝突
             icon.className = "w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl";
             icon.style.boxShadow = "var(--shadow-inset)";
-            icon.style.color = ""; // Clear inline color
+            icon.style.color = ""; 
             icon.classList.remove('text-red-500', 'text-yellow-500', 'text-blue-500', 'text-green-500', 'animate-pulse', 'text-gray-400');
 
-            // 預設樣式
             icon.classList.add('text-gray-400');
             
             if(s==='Cancelled') { 
@@ -653,7 +684,7 @@
                 icon.innerHTML='<i class="fa-solid fa-file-invoice-dollar"></i>'; 
                 icon.classList.remove('text-gray-400');
                 icon.classList.add('text-blue-500', 'animate-pulse');
-                icon.style.boxShadow = "var(--shadow-raised)"; // Raised when waiting
+                icon.style.boxShadow = "var(--shadow-raised)";
                 document.getElementById('statusTitle').innerText="等待付款"; 
                 pay.classList.remove('hidden'); 
                 cancelArea.classList.remove('hidden'); 
