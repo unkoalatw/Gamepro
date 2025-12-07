@@ -6,12 +6,17 @@
     <title>尾刀核心 | 專業電競陪玩代打平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Style 保持不變 -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-        :root { --bg-base: #292d3e; --text-main: #e0e6ed; --text-sub: #94a3b8; --accent: #a855f7; --shadow-raised: 6px 6px 12px #212432, -6px -6px 12px #31364a; --shadow-inset: inset 6px 6px 12px #212432, inset -6px -6px 12px #31364a; }
+        
+        :root {
+            --bg-base: #292d3e; --text-main: #e0e6ed; --text-sub: #94a3b8; --accent: #a855f7;
+            --shadow-raised: 6px 6px 12px #212432, -6px -6px 12px #31364a;
+            --shadow-inset: inset 6px 6px 12px #212432, inset -6px -6px 12px #31364a;
+        }
         @media (max-width: 768px) { :root { --shadow-raised: 3px 3px 6px #212432, -3px -3px 6px #31364a; --shadow-inset: inset 3px 3px 6px #212432, inset -3px -3px 6px #31364a; } }
         body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--bg-base); color: var(--text-main); overflow-x: hidden; }
+        
         .neu-card { background-color: var(--bg-base); border-radius: 1.5rem; box-shadow: var(--shadow-raised); border: 1px solid rgba(255, 255, 255, 0.05); }
         .neu-btn { background-color: var(--bg-base); color: var(--text-main); border-radius: 1rem; box-shadow: var(--shadow-raised); font-weight: bold; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; touch-action: manipulation; }
         .neu-btn:hover { color: var(--accent); transform: translateY(-2px); }
@@ -36,17 +41,16 @@
 </head>
 <body class="min-h-screen flex flex-col" onload="initApp()">
 
-    <!-- Navbar ... (Same) -->
     <nav class="fixed w-full z-40 bg-[#292d3e]/95 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex justify-between items-center">
             <div class="flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center mr-2 md:mr-3 text-purple-400" style="box-shadow: var(--shadow-raised);"><i class="fa-solid fa-gamepad text-base md:text-xl"></i></div><span class="font-bold text-lg md:text-2xl tracking-wide text-gray-200">尾刀核心</span>
+                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center mr-2 md:mr-3 text-purple-400" style="box-shadow: var(--shadow-raised);"><i class="fa-solid fa-gamepad text-base md:text-xl"></i></div>
+                <span class="font-bold text-lg md:text-2xl tracking-wide text-gray-200">尾刀核心</span>
             </div>
             <div><button onclick="openOrderHub()" class="neu-btn px-4 py-2 text-xs md:text-sm group"><i class="fa-solid fa-user-astronaut mr-2 group-hover:text-purple-400 transition"></i><span id="navBtnText">訂單</span></button></div>
         </div>
     </nav>
 
-    <!-- Hero ... (Same) -->
     <div class="flex-1 flex items-center justify-center text-center px-4 py-20 md:py-24 mt-10">
         <div class="max-w-4xl animate-fade-in space-y-8 md:space-y-10">
             <div class="inline-block p-6 md:p-8 rounded-full mb-2" style="box-shadow: var(--shadow-raised);"><i class="fa-solid fa-bolt text-4xl md:text-6xl text-purple-500 text-glow"></i></div>
@@ -56,7 +60,6 @@
         </div>
     </div>
 
-    <!-- Booking Section -->
     <div id="bookingSection" class="min-h-screen py-12 md:py-24 px-4 hidden">
         <div class="max-w-3xl mx-auto">
             <div class="neu-card p-6 md:p-12 relative">
@@ -72,7 +75,9 @@
                     <div id="boosterSection" class="hidden">
                         <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">02. 選擇大神</label>
                         <div id="boosterGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6"></div>
-                        <input type="hidden" id="selectedBoosterId" value=""><input type="hidden" id="selectedBoosterName" value=""><input type="hidden" id="selectedBoosterPrice" value="0">
+                        <input type="hidden" id="selectedBoosterId" value="">
+                        <input type="hidden" id="selectedBoosterName" value="">
+                        <input type="hidden" id="selectedBoosterPrice" value="0">
                     </div>
 
                     <div>
@@ -145,13 +150,29 @@
         let activeDiscount = 0;
         let globalSettings = { terms: "載入中...", payment_notice: "載入中...", priority_rate: 0.3, stream_rate: 0.2 };
 
-        function initApp() { document.getElementById('dateInput').valueAsDate = new Date(); fetchGames(); fetchSettings(); const savedId = getCookie("gcarry_order"); if(savedId) { document.getElementById('navBtnText').innerText = `訂單`; openOrderHub(savedId); } }
+        // ★★★ 核心修正：使用 localStorage ★★★
+        function initApp() { 
+            document.getElementById('dateInput').valueAsDate = new Date(); 
+            fetchGames(); 
+            fetchSettings(); 
+            const savedId = localStorage.getItem("gcarry_order"); 
+            if(savedId) { 
+                document.getElementById('navBtnText').innerText = `訂單`; 
+                openOrderHub(savedId); 
+            } 
+        }
+
+        // Notification
         function requestNotificationPermission() { if(!("Notification" in window)) return; const btn=document.getElementById('enableNotifyBtn'); if(Notification.permission==='default') btn.classList.remove('hidden'); else btn.classList.add('hidden'); }
-        function enableNotifications() { if(!("Notification" in window)) { alert("不支援通知"); return; } Notification.requestPermission().then(p => { if(p==="granted") { alert("通知已開啟！"); sendNotification("測試", "通知功能正常"); } requestNotificationPermission(); }); }
+        function enableNotifications() { if(!("Notification" in window)) { alert("不支援"); return; } Notification.requestPermission().then(p => { if(p==="granted") { alert("通知已開啟！"); sendNotification("測試", "通知功能正常"); } requestNotificationPermission(); }); }
         function sendNotification(t,b) { if(Notification.permission==="granted") new Notification(t, {body:b, icon:"https://cdn-icons-png.flaticon.com/512/3225/3225132.png"}); }
+
+        // Settings
         function fetchSettings() { fetch(GAS_API_URL + "?action=getSettings").then(r => r.json()).then(d => { globalSettings = d; document.getElementById('paymentNoticeDisplay').innerText = d.payment_notice; document.getElementById('ratePriorityDisplay').innerText = Math.round(d.priority_rate * 100); document.getElementById('rateStreamDisplay').innerText = Math.round(d.stream_rate * 100); }); }
         function showTermsModal() { document.getElementById('termsContent').innerText = globalSettings.terms; document.getElementById('termsModal').classList.remove('hidden'); document.getElementById('termsModal').classList.add('flex'); }
         function closeTermsModal() { document.getElementById('termsModal').classList.add('hidden'); document.getElementById('termsModal').classList.remove('flex'); }
+
+        // Core
         function fetchGames() { fetch(GAS_API_URL+"?action=getGames").then(r=>r.ok?r.json():Promise.reject()).then(d=>renderGames(d)).catch(()=>{ isMockMode=true; document.getElementById('mockDataMsg').classList.remove('hidden'); renderGames([{id:'lol', name:'英雄聯盟 (Demo)', companion:true, boost:true}]); }); }
         function renderGames(data) { allGames=data; const sel=document.getElementById('gameSelect'); sel.innerHTML=data.length?data.map(g=>`<option value="${g.id}" class="text-gray-800">${g.name}</option>`).join(''):'<option value="">無遊戲</option>'; onGameChange(); }
         function onGameChange() { updateServiceOptions(); fetchBoosters(); }
@@ -210,11 +231,14 @@
             if(target) { target.style.boxShadow = "var(--shadow-inset)"; target.style.borderColor = "var(--accent)"; }
             document.getElementById('selectedBoosterId').value = id;
             document.getElementById('selectedBoosterName').value = name;
-            const cleanPrice = price ? parseInt(price.toString().replace(/\D/g, '')) : 0;
-            document.getElementById('selectedBoosterPrice').value = cleanPrice || 0;
+            // ★ 強制數字轉換 ★
+            const cleanPrice = price ? parseInt(String(price).replace(/\D/g, '')) : 0;
+            document.getElementById('selectedBoosterPrice').value = cleanPrice;
             updatePricePreview();
         }
         function changeHours(delta) { currentHours += delta; if(currentHours < 1) currentHours = 1; document.getElementById('displayHours').innerText = currentHours; updatePricePreview(); }
+        
+        // ★★★ 核心修正：強制更新價格 ★★★
         function updatePricePreview() {
             const price = parseInt(document.getElementById('selectedBoosterPrice').value) || 0;
             const preview = document.getElementById('pricePreview');
@@ -235,6 +259,7 @@
                 totalDisplay.innerText = `$${finalTotal}`;
             } else { preview.classList.add('hidden'); }
         }
+
         function verifyCoupon() {
             const code = document.getElementById('couponInput').value.trim(); const msg = document.getElementById('couponMsg'); if(!code) return;
             msg.innerText = "驗證中..."; msg.className = "text-xs mt-1 h-4 text-gray-500";
@@ -244,14 +269,10 @@
             });
         }
         function getMockBoosters(gid) { if(gid === 'lol') return [{id:'b1', name:'Faker', rank:'菁英', price:'200', tags:['#技術流']}, {id:'b2', name:'Keria', rank:'宗師', price:'180', tags:['#可愛']}]; return []; }
-        
-        // ★★★ 更新提交邏輯：傳送完整資訊 ★★★
         function submitInquiry() {
             const btn = document.querySelector('button[onclick="submitInquiry()"]');
             const orgTxt = btn.innerHTML;
-            let totalPrice = 0; 
-            let requestNote = ""; // 新增獨立變數
-            let optionsArr = [];
+            let totalPrice = 0; let noteStr = ""; let optionsArr = [];
             const pRate = Math.round(globalSettings.priority_rate * 100); const sRate = Math.round(globalSettings.stream_rate * 100);
             
             if(currentServiceType === 'boost') {
@@ -265,10 +286,10 @@
                 totalPrice = parseInt(totalText.replace('$', '')) || 0;
             } else {
                 currentHours = 0; totalPrice = 0;
-                requestNote = document.getElementById('boostRequestInput').value; // 抓取需求
-                if(!requestNote) { alert("請填寫代打需求描述！"); return; }
+                const requestText = document.getElementById('boostRequestInput').value;
+                if(!requestText) { alert("請填寫代打需求描述！"); return; }
+                noteStr = " [需求: " + requestText + "]"; 
             }
-            
             let account = "", password = "";
             if (currentServiceType === 'boost') {
                 account = document.getElementById('gameAccount').value;
@@ -276,37 +297,23 @@
                 if (!account || !password) { alert("代打請填寫帳號密碼，以便大神登入！"); return; }
             }
             if (!document.getElementById('agreeTerms').checked) { alert("請先同意服務條款！"); return; }
-            
-            const form = { 
-                action: 'createInquiry', 
-                game: document.getElementById('gameSelect').value, 
-                type: currentServiceType, 
-                boosterId: document.getElementById('selectedBoosterId').value, 
-                boosterName: document.getElementById('selectedBoosterName').value, 
-                // ★ 獨立傳送需求 Note
-                requestNote: requestNote,
-                date: document.getElementById('dateInput').value, 
-                time: currentServiceType === 'companion' ? document.getElementById('timeInput').value : "無(代打)", 
-                email: document.getElementById('emailInput').value, 
-                hours: currentHours, 
-                totalPrice: totalPrice, 
-                role: document.getElementById('roleInput').value, 
-                options: optionsStr, 
-                coupon: document.getElementById('couponInput').value, 
-                discount: activeDiscount, 
-                account: account, 
-                password: password 
-            };
-
+            const form = { action: 'createInquiry', game: document.getElementById('gameSelect').value, type: currentServiceType, boosterId: document.getElementById('selectedBoosterId').value, boosterName: document.getElementById('selectedBoosterName').value + noteStr, date: document.getElementById('dateInput').value, time: currentServiceType === 'companion' ? document.getElementById('timeInput').value : "無(代打)", email: document.getElementById('emailInput').value, hours: currentHours, totalPrice: totalPrice, role: document.getElementById('roleInput').value, options: optionsStr, coupon: document.getElementById('couponInput').value, discount: activeDiscount, account: account, password: password };
             if(!form.game || !form.date || !form.email) { alert("請填寫完整欄位！"); return; }
             if(currentServiceType === 'companion' && !form.time) { alert("請選擇時間！"); return; }
-
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>...'; btn.disabled = true;
             if(isMockMode) { setTimeout(() => { showCreatedModal("DEMO-123"); btn.innerHTML=orgTxt; btn.disabled=false; }, 1000); return; }
             fetch(GAS_API_URL, {method:'POST', body:JSON.stringify(form)}).then(r=>r.json()).then(d=>{ if(d.status==='success') showCreatedModal(d.orderId); else alert(d.message); }).finally(()=>{ btn.innerHTML=orgTxt; btn.disabled=false; });
         }
         function scrollToOrder() { document.getElementById('bookingSection').classList.remove('hidden'); document.getElementById('bookingSection').scrollIntoView({behavior:'smooth'}); }
-        function showCreatedModal(orderId) { currentOrderId = orderId; document.getElementById('createdOrderIdText').innerText = orderId; document.getElementById('createdModal').classList.remove('hidden'); document.getElementById('createdModal').classList.add('flex'); setCookie("gcarry_order", orderId, 7); }
+        
+        // ★★★ 核心修正：使用 localStorage ★★★
+        function showCreatedModal(orderId) { 
+            currentOrderId = orderId; 
+            document.getElementById('createdOrderIdText').innerText = orderId; 
+            document.getElementById('createdModal').classList.remove('hidden'); 
+            document.getElementById('createdModal').classList.add('flex'); 
+            localStorage.setItem("gcarry_order", orderId); // Use localStorage 
+        }
         function copyTextToClipboard(text) { const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; textArea.style.top = "0"; document.body.appendChild(textArea); textArea.focus(); textArea.select(); try { const successful = document.execCommand('copy'); document.body.removeChild(textArea); if (successful) return Promise.resolve(); else return Promise.reject("複製失敗"); } catch (err) { document.body.removeChild(textArea); return Promise.reject(err); } }
         function copyCreatedId() { const text = document.getElementById('createdOrderIdText').innerText; copyTextToClipboard(text).then(() => alert("已複製單號！")); }
         function copyBoosterId() { const text = document.getElementById('displayBoosterId').innerText; copyTextToClipboard(text).then(() => alert("已複製 ID")); }
@@ -322,9 +329,8 @@
         function renderChat(m) { document.getElementById('chatBox').innerHTML = m.map(x=>`<div class="mb-4 ${x.sender==='User'?'text-right':'text-left'}"><span class="px-5 py-3 rounded-2xl text-xs md:text-sm inline-block max-w-[80%] ${x.sender==='User'?'text-purple-400':'text-gray-400'}" style="box-shadow: var(--shadow-raised)">${x.text}</span></div>`).join(''); }
         function sendUserMessage() { const t=document.getElementById('chatMsg').value; if(t) fetch(GAS_API_URL, {method:'POST', body:JSON.stringify({action:'sendMessage', orderId:currentOrderId, sender:'User', message:t})}).then(()=>{ document.getElementById('chatMsg').value=''; loadChatMessages(); }); }
         function mockLoadChat() { renderChat([{sender:'User', text:'Hi'}, {sender:'Admin', text:'歡迎!'}]); }
-        function setCookie(n,v,d){const e=new Date();e.setTime(e.getTime()+(d*86400000));document.cookie=n+"="+v+";path=/;expires="+e.toUTCString();}
-        function getCookie(n){const m=n+"=";const c=document.cookie.split(';');for(let i=0;i<c.length;i++){let x=c[i];while(x.charAt(0)==' ')x=x.substring(1);if(x.indexOf(m)==0)return x.substring(m.length,x.length);}return null;}
-        function checkCookieForOrder(){const id=getCookie("gcarry_order"); if(id) document.getElementById('navBtnText').innerText = `查詢 (${id})`;}
+        function getCookie(n){return localStorage.getItem(n);} // Fallback if old code calls getCookie
+        
         setInterval(()=>{ if(!document.getElementById('orderHub').classList.contains('hidden') && currentOrderId && !isMockMode && !currentOrderId.startsWith("DEMO")) { checkStatusReal(currentOrderId, false); } }, 10000); 
     </script>
 </body>
