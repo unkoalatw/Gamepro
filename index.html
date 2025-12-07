@@ -9,380 +9,207 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         
-        /* --- Neumorphism 風格變數 --- */
         :root {
-            --bg-base: #292d3e;      /* 深灰藍底色 */
-            --text-main: #e0e6ed;    /* 亮灰白文字 */
-            --text-sub: #94a3b8;     /* 次要文字 */
-            --accent: #a855f7;       /* 紫色點綴 */
-            
-            /* 凸起陰影 (Raised) */
-            --shadow-raised: 6px 6px 12px #212432, 
-                             -6px -6px 12px #31364a;
-            
-            /* 凹陷陰影 (Inset) */
-            --shadow-inset: inset 6px 6px 12px #212432, 
-                            inset -6px -6px 12px #31364a;
+            --bg-base: #292d3e; --text-main: #e0e6ed; --text-sub: #94a3b8; --accent: #a855f7;
+            --shadow-raised: 6px 6px 12px #212432, -6px -6px 12px #31364a;
+            --shadow-inset: inset 6px 6px 12px #212432, inset -6px -6px 12px #31364a;
         }
+        @media (max-width: 768px) { :root { --shadow-raised: 3px 3px 6px #212432, -3px -3px 6px #31364a; --shadow-inset: inset 3px 3px 6px #212432, inset -3px -3px 6px #31364a; } }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--bg-base); color: var(--text-main); overflow-x: hidden; }
         
-        /* 手機版陰影調整 */
-        @media (max-width: 768px) {
-            :root {
-                --shadow-raised: 3px 3px 6px #212432, -3px -3px 6px #31364a;
-                --shadow-inset: inset 3px 3px 6px #212432, inset -3px -3px 6px #31364a;
-            }
-        }
-
-        body { 
-            font-family: 'Noto Sans TC', sans-serif; 
-            background-color: var(--bg-base); 
-            color: var(--text-main); 
-            overflow-x: hidden;
-        }
-
-        /* --- Neu 元件樣式 --- */
-        .neu-card {
-            background-color: var(--bg-base);
-            border-radius: 1.5rem;
-            box-shadow: var(--shadow-raised);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .neu-btn {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-raised);
-            font-weight: bold;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            touch-action: manipulation;
-        }
+        .neu-card { background-color: var(--bg-base); border-radius: 1.5rem; box-shadow: var(--shadow-raised); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .neu-btn { background-color: var(--bg-base); color: var(--text-main); border-radius: 1rem; box-shadow: var(--shadow-raised); font-weight: bold; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; touch-action: manipulation; }
         .neu-btn:hover { color: var(--accent); transform: translateY(-2px); }
-        .neu-btn:active {
-            box-shadow: var(--shadow-inset);
-            transform: translateY(0);
-            color: var(--accent);
-        }
+        .neu-btn:active { box-shadow: var(--shadow-inset); transform: translateY(0); color: var(--accent); }
         .neu-btn-primary { color: var(--accent); }
-
-        .neu-input {
-            background-color: var(--bg-base);
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-inset);
-            border: none;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-        }
-        .neu-input:focus {
-            outline: none;
-            box-shadow: inset 3px 3px 6px #212432, 
-                        inset -3px -3px 6px #31364a,
-                        0 0 0 2px var(--accent);
-        }
-        
-        .neu-radio-label {
-            cursor: pointer;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-raised);
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
+        .neu-input { background-color: var(--bg-base); border-radius: 0.75rem; box-shadow: var(--shadow-inset); border: none; color: var(--text-main); transition: all 0.3s ease; }
+        .neu-input:focus { outline: none; box-shadow: inset 3px 3px 6px #212432, inset -3px -3px 6px #31364a, 0 0 0 2px var(--accent); }
+        .neu-radio-label { cursor: pointer; border-radius: 1rem; box-shadow: var(--shadow-raised); transition: all 0.2s; border: 1px solid rgba(255, 255, 255, 0.02); }
         input:checked + .neu-radio-label { box-shadow: var(--shadow-inset); color: var(--accent); }
-
+        .neu-checkbox { appearance: none; width: 1.2em; height: 1.2em; background: var(--bg-base); box-shadow: var(--shadow-inset); border-radius: 0.25rem; display: inline-grid; place-content: center; margin-right: 0.5em; cursor: pointer; }
+        .neu-checkbox::before { content: ""; width: 0.65em; height: 0.65em; transform: scale(0); transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em var(--accent); border-radius: 0.15rem; }
+        .neu-checkbox:checked::before { transform: scale(1); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         ::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; opacity: 0.6; }
-        ::-webkit-calendar-picker-indicator:hover { opacity: 1; }
-
         @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        
         .text-glow { text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
         select option { background-color: #292d3e; color: #e0e6ed; }
+        .height-transition { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .height-transition.show { max-height: 100px; opacity: 1; margin-top: 0.5rem; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col" onload="initApp()">
 
-    <!-- Navbar -->
     <nav class="fixed w-full z-40 bg-[#292d3e]/95 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex justify-between items-center">
             <div class="flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center mr-2 md:mr-3 text-purple-400" style="box-shadow: var(--shadow-raised);">
-                    <i class="fa-solid fa-gamepad text-base md:text-xl"></i>
-                </div>
+                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center mr-2 md:mr-3 text-purple-400" style="box-shadow: var(--shadow-raised);"><i class="fa-solid fa-gamepad text-base md:text-xl"></i></div>
                 <span class="font-bold text-lg md:text-2xl tracking-wide text-gray-200">尾刀核心</span>
             </div>
-            <div>
-                <button onclick="openOrderHub()" class="neu-btn px-4 py-2 text-xs md:text-sm group">
-                    <i class="fa-solid fa-user-astronaut mr-2 group-hover:text-purple-400 transition"></i> 
-                    <span id="navBtnText">訂單</span>
-                </button>
-            </div>
+            <div><button onclick="openOrderHub()" class="neu-btn px-4 py-2 text-xs md:text-sm group"><i class="fa-solid fa-user-astronaut mr-2 group-hover:text-purple-400 transition"></i><span id="navBtnText">訂單</span></button></div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="flex-1 flex items-center justify-center text-center px-4 py-20 md:py-24 mt-10">
         <div class="max-w-4xl animate-fade-in space-y-8 md:space-y-10">
-            <div class="inline-block p-6 md:p-8 rounded-full mb-2" style="box-shadow: var(--shadow-raised);">
-                <i class="fa-solid fa-bolt text-4xl md:text-6xl text-purple-500 text-glow"></i>
-            </div>
-            <h1 class="text-4xl md:text-7xl font-bold tracking-tight leading-tight text-gray-200">
-                你的專屬 <br><span class="text-purple-500 text-glow">電競管家</span>
-            </h1>
-            <p class="text-base md:text-xl text-gray-400 font-light tracking-wide">
-                大神代打 · 甜美陪玩 · 極速上分
-            </p>
-            <div class="pt-4 flex justify-center">
-                <button onclick="scrollToOrder()" class="neu-btn neu-btn-primary px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl rounded-2xl w-full md:w-auto">
-                    開始點單 <i class="fa-solid fa-arrow-down ml-3 animate-bounce"></i>
-                </button>
-            </div>
+            <div class="inline-block p-6 md:p-8 rounded-full mb-2" style="box-shadow: var(--shadow-raised);"><i class="fa-solid fa-bolt text-4xl md:text-6xl text-purple-500 text-glow"></i></div>
+            <h1 class="text-4xl md:text-7xl font-bold tracking-tight leading-tight text-gray-200">你的專屬 <br><span class="text-purple-500 text-glow">電競管家</span></h1>
+            <p class="text-base md:text-xl text-gray-400 font-light tracking-wide">大神代打 · 甜美陪玩 · 極速上分</p>
+            <div class="pt-4 flex justify-center"><button onclick="scrollToOrder()" class="neu-btn neu-btn-primary px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl rounded-2xl w-full md:w-auto">開始點單 <i class="fa-solid fa-arrow-down ml-3 animate-bounce"></i></button></div>
         </div>
     </div>
 
-    <!-- Booking Section -->
     <div id="bookingSection" class="min-h-screen py-12 md:py-24 px-4 hidden">
         <div class="max-w-3xl mx-auto">
             <div class="neu-card p-6 md:p-12 relative">
-                <h2 class="text-2xl md:text-3xl font-bold mb-8 md:mb-10 text-center flex items-center justify-center text-gray-200">
-                    <span class="w-2 h-2 md:w-3 md:h-3 bg-purple-500 rounded-full mr-3 md:mr-4 shadow-[0_0_10px_#a855f7]"></span>
-                    預約服務單
-                </h2>
+                <h2 class="text-2xl md:text-3xl font-bold mb-8 md:mb-10 text-center flex items-center justify-center text-gray-200"><span class="w-2 h-2 md:w-3 md:h-3 bg-purple-500 rounded-full mr-3 md:mr-4 shadow-[0_0_10px_#a855f7]"></span>預約服務單</h2>
                 
                 <form id="bookingForm" class="space-y-6 md:space-y-10">
-                    <!-- 1. Game -->
                     <div>
                         <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">01. 選擇遊戲 <span class="text-red-400">*</span></label>
-                        <select id="gameSelect" onchange="onGameChange()" class="w-full neu-input px-4 md:px-6 py-3 md:py-4 text-base md:text-lg bg-transparent appearance-none cursor-pointer">
-                            <option value="">載入中...</option>
-                        </select>
+                        <select id="gameSelect" onchange="onGameChange()" class="w-full neu-input px-4 md:px-6 py-3 md:py-4 text-base md:text-lg bg-transparent appearance-none cursor-pointer"><option value="">載入中...</option></select>
                         <p id="mockDataMsg" class="text-yellow-500 text-xs mt-3 ml-2 hidden"><i class="fas fa-wifi mr-1"></i>展示模式</p>
                     </div>
 
-                    <!-- 2. Booster -->
                     <div id="boosterSection" class="hidden">
                         <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">02. 選擇大神</label>
                         <div id="boosterGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6"></div>
-                        <input type="hidden" id="selectedBoosterId" value="">
-                        <input type="hidden" id="selectedBoosterName" value="">
-                        <input type="hidden" id="selectedBoosterPrice" value="0">
+                        <input type="hidden" id="selectedBoosterId" value=""><input type="hidden" id="selectedBoosterName" value=""><input type="hidden" id="selectedBoosterPrice" value="0">
                     </div>
 
-                    <!-- 3. Service Type -->
                     <div>
                         <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">03. 服務類型</label>
                         <div id="serviceTypeContainer" class="grid grid-cols-2 gap-4 md:gap-6"></div>
                     </div>
 
-                    <!-- 4. Dynamic Content -->
                     <div id="dynamicServiceSection" class="grid md:grid-cols-2 gap-6 md:gap-8">
-                        <!-- A. Hours -->
                         <div id="hoursSection">
                             <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">04. 預約時數 <span class="text-red-400">*</span></label>
-                            <div class="neu-input px-4 md:px-6 py-3 flex items-center justify-between">
-                                <button type="button" onclick="changeHours(-1)" class="w-10 h-10 rounded-full neu-btn text-xl hover:text-red-400">-</button>
-                                <div class="text-center">
-                                    <span id="displayHours" class="text-2xl font-bold text-white">1</span> <span class="text-xs text-gray-400 block">小時</span>
+                            <div class="neu-input px-4 md:px-6 py-3 flex items-center justify-between"><button type="button" onclick="changeHours(-1)" class="w-10 h-10 rounded-full neu-btn text-xl hover:text-red-400">-</button><div class="text-center"><span id="displayHours" class="text-2xl font-bold text-white">1</span> <span class="text-xs text-gray-400 block">小時</span></div><button type="button" onclick="changeHours(1)" class="w-10 h-10 rounded-full neu-btn text-xl hover:text-green-400">+</button></div>
+                            <div id="pricePreview" class="mt-3 text-right hidden px-2"><span class="text-gray-400 text-xs uppercase">Estimated</span> <span id="totalPriceDisplay" class="text-xl font-bold text-green-400 ml-2">$0</span></div>
+                        </div>
+                        <div id="requestSection" class="hidden md:col-span-2 space-y-6">
+                            <div><label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">04. 代打需求 <span class="text-red-400">*</span></label><textarea id="boostRequestInput" rows="3" class="w-full neu-input px-4 md:px-6 py-4" placeholder="例如：目前銀牌2，想打到金牌4..."></textarea></div>
+                            <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+                                <div><label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">遊戲帳號 <span class="text-red-400">*</span></label><input type="text" id="gameAccount" class="w-full neu-input px-4 md:px-6 py-3" placeholder="您的遊戲登入帳號"></div>
+                                <div><label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">遊戲密碼 <span class="text-red-400">*</span></label><input type="text" id="gamePassword" class="w-full neu-input px-4 md:px-6 py-3" placeholder="您的遊戲登入密碼"></div>
+                            </div>
+                            <div class="mt-3 text-right px-2"><span class="text-gray-400 text-xs uppercase">Quote</span> <span class="text-lg font-bold text-yellow-500 ml-2">等待報價</span></div>
+                        </div>
+                    </div>
+                    
+                    <div id="extraOptions" class="grid md:grid-cols-2 gap-6 md:gap-8">
+                        <div>
+                            <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">指定角色 / 路線</label>
+                            <input type="text" id="roleInput" class="w-full neu-input px-4 md:px-6 py-3" placeholder="例如: 犽宿 / 中路 (選填)">
+                        </div>
+                        <!-- ★★★ 修正：加了 id="boostAddons" ★★★ -->
+                        <div id="boostAddons" class="hidden">
+                            <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">加值服務</label>
+                            <div class="flex flex-col gap-3">
+                                <label class="flex items-center text-sm text-gray-300 cursor-pointer"><input type="checkbox" id="optPriority" class="neu-checkbox" onchange="updatePricePreview()"> <span class="ml-2">加急處理 (+<span id="ratePriorityDisplay">30</span>%)</span></label>
+                                <div>
+                                    <label class="flex items-center text-sm text-gray-300 cursor-pointer"><input type="checkbox" id="optStream" class="neu-checkbox" onchange="toggleStreamInput()"> <span class="ml-2">指定直播/錄影 (+<span id="rateStreamDisplay">20</span>%)</span></label>
+                                    <div id="streamInputContainer" class="height-transition"><input type="text" id="streamDetail" class="w-full neu-input px-3 py-2 text-sm mt-2" placeholder="平台/頻道/接收方式"></div>
                                 </div>
-                                <button type="button" onclick="changeHours(1)" class="w-10 h-10 rounded-full neu-btn text-xl hover:text-green-400">+</button>
-                            </div>
-                            <div id="pricePreview" class="mt-3 text-right hidden px-2">
-                                <span class="text-gray-400 text-xs uppercase">Estimated</span> 
-                                <span id="totalPriceDisplay" class="text-xl font-bold text-green-400 ml-2">$0</span>
-                            </div>
-                        </div>
-                        <!-- B. Request -->
-                        <div id="requestSection" class="hidden md:col-span-2">
-                            <label class="text-sm font-bold text-purple-400 uppercase tracking-widest mb-3 block pl-1">04. 代打需求 <span class="text-red-400">*</span></label>
-                            <textarea id="boostRequestInput" rows="3" class="w-full neu-input px-4 md:px-6 py-4" placeholder="例如：目前銀牌2，想打到金牌4..."></textarea>
-                            <div class="mt-3 text-right px-2">
-                                <span class="text-gray-400 text-xs uppercase">Quote</span> 
-                                <span class="text-lg font-bold text-yellow-500 ml-2">等待報價</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 5. Date & Time -->
                     <div class="grid md:grid-cols-2 gap-6 md:gap-8">
-                        <div>
-                            <label class="text-sm font-bold text-gray-400 mb-2 block pl-1">日期 <span class="text-red-400">*</span></label>
-                            <input type="date" id="dateInput" class="w-full neu-input px-4 md:px-6 py-3 cursor-pointer">
-                        </div>
-                        <div>
-                            <label class="text-sm font-bold text-gray-400 mb-2 block pl-1">時間 <span class="text-red-400">*</span></label>
-                            <input type="time" id="timeInput" class="w-full neu-input px-4 md:px-6 py-3 cursor-pointer">
-                        </div>
+                        <div><label class="text-sm font-bold text-gray-400 mb-2 block pl-1">日期 <span class="text-red-400">*</span></label><input type="date" id="dateInput" class="w-full neu-input px-4 md:px-6 py-3 cursor-pointer"></div>
+                        <div id="timeSection"><label class="text-sm font-bold text-gray-400 mb-2 block pl-1">時間 <span class="text-red-400">*</span></label><input type="time" id="timeInput" class="w-full neu-input px-4 md:px-6 py-3 cursor-pointer"></div>
                     </div>
 
-                    <!-- 6. Email -->
-                    <div>
-                        <label class="text-sm font-bold text-gray-400 mb-2 block pl-1">Email <span class="text-red-400">*</span></label>
-                        <input type="email" id="emailInput" placeholder="example@gmail.com" class="w-full neu-input px-4 md:px-6 py-3">
+                    <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-end">
+                        <div><label class="text-sm font-bold text-gray-400 mb-2 block pl-1">Email <span class="text-red-400">*</span></label><input type="email" id="emailInput" placeholder="example@gmail.com" class="w-full neu-input px-4 md:px-6 py-3"></div>
+                        <div><label class="text-sm font-bold text-gray-400 mb-2 block pl-1">優惠碼 (選填)</label><div class="flex gap-2"><input type="text" id="couponInput" class="flex-1 neu-input px-4 py-3 uppercase" placeholder="COUPON"><button type="button" onclick="verifyCoupon()" class="neu-btn px-4 text-purple-400 text-sm">驗證</button></div><p id="couponMsg" class="text-xs mt-1 h-4"></p></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-center gap-2 mt-4">
+                        <input type="checkbox" id="agreeTerms" class="neu-checkbox">
+                        <label for="agreeTerms" class="text-sm text-gray-400">我已閱讀並同意 <span class="text-purple-400 cursor-pointer underline" onclick="showTermsModal()">服務條款</span></label>
                     </div>
 
-                    <button type="button" onclick="submitInquiry()" class="w-full neu-btn neu-btn-primary py-4 md:py-5 text-lg mt-4">
-                        送出需求 <i class="fa-solid fa-paper-plane ml-3"></i>
-                    </button>
+                    <button type="button" onclick="submitInquiry()" class="w-full neu-btn neu-btn-primary py-4 md:py-5 text-lg mt-8">送出需求 <i class="fa-solid fa-paper-plane ml-3"></i></button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Created Modal -->
-    <div id="createdModal" class="fixed inset-0 bg-[#292d3e]/90 hidden items-center justify-center z-[60] backdrop-blur-sm p-4">
-        <div class="neu-card p-8 md:p-10 w-full max-w-sm text-center animate-fade-in border border-green-500/20">
-            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-green-400 text-3xl md:text-4xl" style="box-shadow: var(--shadow-inset);">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <h3 class="text-xl md:text-2xl font-bold text-white mb-3">需求已送出</h3>
-            <p class="text-gray-400 text-sm mb-8">單號已生成，請保存以便查詢。</p>
-            <div class="neu-input p-4 mb-8 cursor-pointer hover:text-purple-400 transition group" onclick="copyCreatedId()">
-                <p class="text-[10px] text-gray-500 uppercase tracking-wider mb-2">ORDER ID</p>
-                <div class="flex items-center justify-center gap-3">
-                    <span id="createdOrderIdText" class="text-2xl md:text-3xl font-mono font-bold tracking-widest text-purple-400">---</span>
-                    <i class="fa-regular fa-copy text-gray-500 group-hover:text-purple-400"></i>
-                </div>
-            </div>
-            <button onclick="goToHubFromCreated()" class="w-full neu-btn py-4 text-green-400">前往訂單中心</button>
-        </div>
-    </div>
-
-    <!-- Order Hub (Full Screen) -->
-    <div id="orderHub" class="fixed inset-0 z-50 hidden overflow-y-auto" style="background: var(--bg-base);">
-        <button onclick="closeOrderHub()" class="absolute top-4 right-4 md:top-6 md:right-6 z-50 w-10 h-10 md:w-12 md:h-12 rounded-full neu-btn text-gray-400 hover:text-red-400"><i class="fa-solid fa-xmark text-lg md:text-xl"></i></button>
-        
-        <!-- 開啟通知按鈕 -->
-        <button id="enableNotifyBtn" onclick="enableNotifications()" class="absolute top-4 right-16 md:top-6 md:right-20 z-50 neu-btn px-3 md:px-4 h-10 md:h-12 text-xs md:text-sm text-yellow-400 hidden hover:text-yellow-300">
-            <i class="fa-solid fa-bell mr-2"></i> <span class="hidden md:inline">開啟通知</span><span class="md:hidden">通知</span>
-        </button>
-
-        <div class="min-h-screen flex flex-col items-center justify-center p-4">
-            <!-- Search -->
-            <div id="hubSearch" class="w-full max-w-md text-center space-y-6 md:space-y-8 animate-fade-in">
-                <div class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl md:text-4xl" style="box-shadow: var(--shadow-raised);">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-bold text-white">查詢訂單</h2>
-                <div class="flex neu-input p-1">
-                    <input type="text" id="hubOrderIdInput" placeholder="輸入單號 (例如: ORD-123456)" class="flex-1 bg-transparent px-4 md:px-6 outline-none text-white placeholder-gray-500 text-sm md:text-base">
-                    <button onclick="checkStatusInHub()" class="neu-btn px-4 md:px-6 py-2 text-purple-400 hover:bg-gray-800/50 text-sm md:text-base">查詢</button>
-                </div>
-            </div>
-
-            <!-- Result -->
-            <div id="hubResult" class="w-full max-w-5xl hidden grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 animate-fade-in">
-                <!-- Left: Info -->
-                <div class="lg:col-span-1 space-y-6 md:space-y-8">
-                    <div class="neu-card p-6 md:p-8 text-center">
-                        <div id="statusIcon" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-2xl md:text-3xl" style="box-shadow: var(--shadow-inset);"><i class="fa-solid fa-spinner fa-spin"></i></div>
-                        <h3 id="statusTitle" class="text-lg md:text-xl font-bold text-white">讀取中...</h3>
-                        <div class="font-mono mt-3 text-purple-400 text-xs md:text-sm tracking-widest" id="displayOrderId"></div>
-                        <div id="userCancelArea" class="mt-6 md:mt-8 hidden">
-                            <button onclick="cancelOrderUser()" class="w-full neu-btn py-3 text-red-400 text-sm hover:text-red-300">
-                                <i class="fa-solid fa-ban mr-2"></i> 取消訂單
-                            </button>
-                        </div>
-                        <div id="boosterIdCard" class="hidden mt-6 md:mt-8 p-4 md:p-6 rounded-2xl" style="box-shadow: var(--shadow-inset);">
-                            <p class="text-[10px] text-gray-500 mb-2 md:mb-3 font-bold uppercase tracking-widest">大神遊戲 ID</p>
-                            <div class="flex items-center justify-between cursor-pointer group" onclick="copyBoosterId()">
-                                <span id="displayBoosterId" class="font-mono font-bold text-white text-lg md:text-xl select-all truncate mr-2">---</span>
-                                <i class="fa-regular fa-copy text-gray-500 group-hover:text-white"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="paymentActionArea" class="neu-card p-6 md:p-8 hidden">
-                        <h4 class="text-green-400 font-bold mb-4 md:mb-6 text-center uppercase tracking-widest text-sm">付款確認</h4>
-                        <div class="mb-4 md:mb-6 p-4 rounded-xl flex justify-between items-center" style="box-shadow: var(--shadow-inset);">
-                            <span class="text-gray-400 text-sm">應付金額</span>
-                            <span id="payAmountDisplay" class="text-xl md:text-2xl font-bold text-white">$0</span>
-                        </div>
-                        <div class="space-y-3 md:space-y-4">
-                            <input type="text" id="payCard" placeholder="MyCard 卡號" class="w-full neu-input px-4 py-3 text-sm">
-                            <input type="text" id="payPwd" placeholder="MyCard 密碼" class="w-full neu-input px-4 py-3 text-sm">
-                        </div>
-                        <button onclick="submitPayment()" class="w-full neu-btn py-3 mt-6 text-green-400 hover:text-green-300">確認付款</button>
-                    </div>
-                </div>
-                
-                <!-- Right: Chat -->
-                <div class="lg:col-span-2 neu-card overflow-hidden flex flex-col h-[500px] md:h-[650px]">
-                    <div class="p-4 md:p-6 border-b border-white/5 font-bold text-gray-300 flex items-center text-sm md:text-base">
-                        <div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-500 mr-2 md:mr-3 shadow-[0_0_8px_#22c55e]"></div> 客服 / 大神
-                    </div>
-                    <div id="chatBox" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 md:space-y-4" style="box-shadow: inset 0 0 20px rgba(0,0,0,0.2);"></div>
-                    <div class="p-4 md:p-6 border-t border-white/5 flex gap-3 md:gap-4 items-center">
-                        <input type="text" id="chatMsg" class="flex-1 neu-input px-4 md:px-6 py-2 md:py-3 text-sm md:text-base" placeholder="輸入訊息...">
-                        <!-- ★★★ 修正：加入 flex-shrink-0 與 items-center ★★★ -->
-                        <button onclick="sendUserMessage()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl neu-btn text-purple-400 text-lg md:text-xl flex-shrink-0"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modals (Terms, Created & Hub) - Keep same -->
+    <div id="termsModal" class="fixed inset-0 bg-[#292d3e]/95 hidden items-center justify-center z-[70] backdrop-blur-sm p-4"><div class="neu-card w-full max-w-2xl max-h-[80vh] flex flex-col"><div class="p-6 border-b border-white/5 flex justify-between items-center"><h3 class="text-xl font-bold text-white">服務條款</h3><button onclick="closeTermsModal()" class="neu-btn w-8 h-8 text-gray-400"><i class="fas fa-times"></i></button></div><div id="termsContent" class="p-6 overflow-y-auto text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">載入中...</div><div class="p-6 border-t border-white/5 text-right"><button onclick="closeTermsModal()" class="neu-btn px-6 py-2">關閉</button></div></div></div>
+    <div id="createdModal" class="fixed inset-0 bg-[#292d3e]/90 hidden items-center justify-center z-[60] backdrop-blur-sm p-4"><div class="neu-card p-8 md:p-10 w-full max-w-sm text-center animate-fade-in border border-green-500/20"><div class="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-green-400 text-3xl md:text-4xl" style="box-shadow: var(--shadow-inset);"><i class="fa-solid fa-check"></i></div><h3 class="text-xl md:text-2xl font-bold text-white mb-3">需求已送出</h3><p class="text-gray-400 text-sm mb-8">單號已生成，請保存以便查詢。</p><div class="neu-input p-4 mb-8 cursor-pointer hover:text-purple-400 transition group" onclick="copyCreatedId()"><p class="text-[10px] text-gray-500 uppercase tracking-wider mb-2">ORDER ID</p><div class="flex items-center justify-center gap-3"><span id="createdOrderIdText" class="text-2xl md:text-3xl font-mono font-bold tracking-widest text-purple-400">---</span><i class="fa-regular fa-copy text-gray-500 group-hover:text-purple-400"></i></div></div><button onclick="goToHubFromCreated()" class="w-full neu-btn py-4 text-green-400">前往訂單中心</button></div></div>
+    <div id="orderHub" class="fixed inset-0 z-50 hidden overflow-y-auto" style="background: var(--bg-base);"><button onclick="closeOrderHub()" class="absolute top-4 right-4 md:top-6 md:right-6 z-50 w-10 h-10 md:w-12 md:h-12 rounded-full neu-btn text-gray-400 hover:text-red-400"><i class="fa-solid fa-xmark text-lg md:text-xl"></i></button><button id="enableNotifyBtn" onclick="enableNotifications()" class="absolute top-4 right-16 md:top-6 md:right-20 z-50 neu-btn px-3 md:px-4 h-10 md:h-12 text-xs md:text-sm text-yellow-400 hidden hover:text-yellow-300"><i class="fa-solid fa-bell mr-2"></i> <span class="hidden md:inline">開啟通知</span><span class="md:hidden">通知</span></button><div class="min-h-screen flex flex-col items-center justify-center p-4"><div id="hubSearch" class="w-full max-w-md text-center space-y-6 md:space-y-8 animate-fade-in"><div class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl md:text-4xl" style="box-shadow: var(--shadow-raised);"><i class="fa-solid fa-magnifying-glass"></i></div><h2 class="text-2xl md:text-3xl font-bold text-white">查詢訂單</h2><div class="flex neu-input p-1"><input type="text" id="hubOrderIdInput" placeholder="輸入單號 (例如: ORD-123456)" class="flex-1 bg-transparent px-4 md:px-6 outline-none text-white placeholder-gray-500 text-sm md:text-base"><button onclick="checkStatusInHub()" class="neu-btn px-4 md:px-6 py-2 text-purple-400 hover:bg-gray-800/50 text-sm md:text-base">查詢</button></div></div><div id="hubResult" class="w-full max-w-5xl hidden grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 animate-fade-in"><div class="lg:col-span-1 space-y-6 md:space-y-8"><div class="neu-card p-6 md:p-8 text-center"><div id="statusIcon" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 text-2xl md:text-3xl" style="box-shadow: var(--shadow-inset);"><i class="fa-solid fa-spinner fa-spin"></i></div><h3 id="statusTitle" class="text-lg md:text-xl font-bold text-white">讀取中...</h3><div class="font-mono mt-3 text-purple-400 text-xs md:text-sm tracking-widest" id="displayOrderId"></div><div id="userCancelArea" class="mt-6 md:mt-8 hidden"><button onclick="cancelOrderUser()" class="w-full neu-btn py-3 text-red-400 text-sm hover:text-red-300"><i class="fa-solid fa-ban mr-2"></i> 取消訂單</button></div><div id="boosterIdCard" class="hidden mt-6 md:mt-8 p-4 md:p-6 rounded-2xl" style="box-shadow: var(--shadow-inset);"><p class="text-[10px] text-gray-500 mb-2 md:mb-3 font-bold uppercase tracking-widest">大神遊戲 ID</p><div class="flex items-center justify-between cursor-pointer group" onclick="copyBoosterId()"><span id="displayBoosterId" class="font-mono font-bold text-white text-lg md:text-xl select-all truncate mr-2">---</span><i class="fa-regular fa-copy text-gray-500 group-hover:text-white"></i></div></div></div><div id="paymentActionArea" class="neu-card p-6 md:p-8 hidden"><h4 class="text-green-400 font-bold mb-4 md:mb-6 text-center uppercase tracking-widest text-sm">付款確認</h4><div class="mb-4 md:mb-6 p-4 rounded-xl flex justify-between items-center" style="box-shadow: var(--shadow-inset);"><span class="text-gray-400 text-sm">應付金額</span><span id="payAmountDisplay" class="text-xl md:text-2xl font-bold text-white">$0</span></div><div class="bg-[#212432] p-4 rounded-lg mb-4 text-xs text-gray-400 whitespace-pre-wrap font-mono" id="paymentNoticeDisplay" style="box-shadow: var(--shadow-inset)"></div><div class="space-y-3 md:space-y-4"><input type="text" id="payCard" placeholder="MyCard 卡號" class="w-full neu-input px-4 py-3 text-sm"><input type="text" id="payPwd" placeholder="MyCard 密碼" class="w-full neu-input px-4 py-3 text-sm"></div><button onclick="submitPayment()" class="w-full neu-btn py-3 mt-6 text-green-400 hover:text-green-300">確認付款</button></div></div><div class="lg:col-span-2 neu-card overflow-hidden flex flex-col h-[500px] md:h-[650px]"><div class="p-4 md:p-6 border-b border-white/5 font-bold text-gray-300 flex items-center text-sm md:text-base"><div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-500 mr-2 md:mr-3 shadow-[0_0_8px_#22c55e]"></div> 客服 / 大神</div><div id="chatBox" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 md:space-y-4" style="box-shadow: inset 0 0 20px rgba(0,0,0,0.2);"></div><div class="p-4 md:p-6 border-t border-white/5 flex gap-3 md:gap-4 items-center"><input type="text" id="chatMsg" class="flex-1 neu-input px-4 md:px-6 py-2 md:py-3 text-sm md:text-base" placeholder="輸入訊息..."><button onclick="sendUserMessage()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl neu-btn text-purple-400 text-lg md:text-xl flex-shrink-0"><i class="fa-solid fa-paper-plane"></i></button></div></div></div></div></div>
 
     <script>
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxm6I0lCN82Tnt3gDWPNKptKO9682Jeik-XSJlb9YTGTG4HkY5d-GfwK75HVHWVhQP8/exec";
-        let allGames = [], currentOrderId = "", isMockMode = false, currentHours = 1, currentServiceType = 'companion', lastKnownStatus = "", lastMsgCount = 0;
+        let allGames=[], currentOrderId="", isMockMode=false, currentHours=1, currentServiceType='companion', lastKnownStatus="", lastMsgCount=0;
+        let activeDiscount = 0;
+        let globalSettings = { terms: "載入中...", payment_notice: "載入中...", priority_rate: 0.3, stream_rate: 0.2 };
 
-        function initApp() {
-            document.getElementById('dateInput').valueAsDate = new Date();
-            fetchGames();
-            const savedId = getCookie("gcarry_order");
-            if(savedId) { document.getElementById('navBtnText').innerText = `訂單`; openOrderHub(savedId); }
-        }
-
-        function requestNotificationPermission() {
-            if (!("Notification" in window)) return;
-            const btn = document.getElementById('enableNotifyBtn');
-            if (Notification.permission === 'default') btn.classList.remove('hidden'); else btn.classList.add('hidden'); 
-        }
-        function enableNotifications() {
-            if (!("Notification" in window)) { alert("不支援通知"); return; }
-            Notification.requestPermission().then(p => { if (p === "granted") { alert("通知已開啟！"); sendNotification("測試", "通知功能正常"); } requestNotificationPermission(); });
-        }
-        function sendNotification(title, body) {
-            if (Notification.permission === "granted") new Notification(title, { body: body, icon: "https://cdn-icons-png.flaticon.com/512/3225/3225132.png" });
-        }
-
-        function fetchGames() {
-            fetch(GAS_API_URL + "?action=getGames").then(r => r.ok ? r.json() : Promise.reject()).then(data => renderGames(data))
-                .catch(() => { isMockMode = true; document.getElementById('mockDataMsg').classList.remove('hidden'); renderGames([{id:'lol', name:'英雄聯盟 (Demo)', companion:true, boost:true}]); });
-        }
-        function renderGames(data) {
-            allGames = data;
-            const sel = document.getElementById('gameSelect');
-            sel.innerHTML = data.length ? data.map(g => `<option value="${g.id}">${g.name}</option>`).join('') : '<option value="">無遊戲</option>';
-            onGameChange(); 
-        }
+        function initApp() { document.getElementById('dateInput').valueAsDate = new Date(); fetchGames(); fetchSettings(); const savedId = getCookie("gcarry_order"); if(savedId) { document.getElementById('navBtnText').innerText = `訂單`; openOrderHub(savedId); } }
+        function requestNotificationPermission() { if(!("Notification" in window)) return; const btn=document.getElementById('enableNotifyBtn'); if(Notification.permission==='default') btn.classList.remove('hidden'); else btn.classList.add('hidden'); }
+        function enableNotifications() { if(!("Notification" in window)) { alert("不支援"); return; } Notification.requestPermission().then(p => { if(p==="granted") { alert("通知已開啟！"); sendNotification("測試", "通知功能正常"); } requestNotificationPermission(); }); }
+        function sendNotification(t,b) { if(Notification.permission==="granted") new Notification(t, {body:b, icon:"https://cdn-icons-png.flaticon.com/512/3225/3225132.png"}); }
+        function fetchSettings() { fetch(GAS_API_URL + "?action=getSettings").then(r => r.json()).then(d => { globalSettings = d; document.getElementById('paymentNoticeDisplay').innerText = d.payment_notice; document.getElementById('ratePriorityDisplay').innerText = Math.round(d.priority_rate * 100); document.getElementById('rateStreamDisplay').innerText = Math.round(d.stream_rate * 100); }); }
+        function showTermsModal() { document.getElementById('termsContent').innerText = globalSettings.terms; document.getElementById('termsModal').classList.remove('hidden'); document.getElementById('termsModal').classList.add('flex'); }
+        function closeTermsModal() { document.getElementById('termsModal').classList.add('hidden'); document.getElementById('termsModal').classList.remove('flex'); }
+        function fetchGames() { fetch(GAS_API_URL+"?action=getGames").then(r=>r.ok?r.json():Promise.reject()).then(d=>renderGames(d)).catch(()=>{ isMockMode=true; document.getElementById('mockDataMsg').classList.remove('hidden'); renderGames([{id:'lol', name:'英雄聯盟 (Demo)', companion:true, boost:true}]); }); }
+        function renderGames(data) { allGames=data; const sel=document.getElementById('gameSelect'); sel.innerHTML=data.length?data.map(g=>`<option value="${g.id}" class="text-gray-800">${g.name}</option>`).join(''):'<option value="">無遊戲</option>'; onGameChange(); }
         function onGameChange() { updateServiceOptions(); fetchBoosters(); }
         function updateServiceOptions() {
-            const gid = document.getElementById('gameSelect').value;
-            const g = allGames.find(x => x.id === gid);
-            if(!g) return;
-            let h = '';
-            if(g.companion) h += `<label class="group"><input type="radio" name="serviceType" value="companion" checked class="peer sr-only" onclick="switchService('companion')"><div class="neu-radio-label p-4 md:p-6 text-center text-gray-400 hover:text-gray-200"><i class="fa-solid fa-microphone-lines text-2xl md:text-3xl mb-2 block"></i><div class="font-bold text-xs md:text-sm">語音陪玩</div></div></label>`;
-            if(g.boost) h += `<label class="group"><input type="radio" name="serviceType" value="boost" class="peer sr-only" onclick="switchService('boost')"><div class="neu-radio-label p-4 md:p-6 text-center text-gray-400 hover:text-gray-200"><i class="fa-solid fa-trophy text-2xl md:text-3xl mb-2 block"></i><div class="font-bold text-xs md:text-sm">技術代打</div></div></label>`;
-            document.getElementById('serviceTypeContainer').innerHTML = h;
+            const gid=document.getElementById('gameSelect').value; const g=allGames.find(x=>x.id===gid); if(!g) return; let h='';
+            if(g.companion) h+=`<label class="group"><input type="radio" name="serviceType" value="companion" checked class="peer sr-only" onclick="switchService('companion')"><div class="neu-radio-label p-4 md:p-6 text-center text-gray-400 hover:text-gray-200"><i class="fa-solid fa-microphone-lines text-2xl md:text-3xl mb-2 block"></i><div class="font-bold text-xs md:text-sm">語音陪玩</div></div></label>`;
+            if(g.boost) h+=`<label class="group"><input type="radio" name="serviceType" value="boost" class="peer sr-only" onclick="switchService('boost')"><div class="neu-radio-label p-4 md:p-6 text-center text-gray-400 hover:text-gray-200"><i class="fa-solid fa-trophy text-2xl md:text-3xl mb-2 block"></i><div class="font-bold text-xs md:text-sm">技術代打</div></div></label>`;
+            document.getElementById('serviceTypeContainer').innerHTML=h;
             if(g.companion) switchService('companion'); else if(g.boost) switchService('boost');
         }
+
+        function toggleStreamInput() { const checked = document.getElementById('optStream').checked; const container = document.getElementById('streamInputContainer'); if(checked) container.classList.add('show'); else container.classList.remove('show'); updatePricePreview(); }
+
+        // ★★★ 核心邏輯修正：代打模式隱藏加值服務區塊 ★★★
         function switchService(type) {
             currentServiceType = type;
             const hoursSec = document.getElementById('hoursSection');
             const reqSec = document.getElementById('requestSection');
-            if (!hoursSec || !reqSec) return;
-            if(type === 'companion') { hoursSec.classList.remove('hidden'); reqSec.classList.add('hidden'); updatePricePreview(); } 
-            else { hoursSec.classList.add('hidden'); reqSec.classList.remove('hidden'); }
+            const boosterSec = document.getElementById('boosterSection');
+            const timeSec = document.getElementById('timeSection');
+            const boostAddons = document.getElementById('boostAddons'); // 加值服務區塊
+
+            if (!hoursSec || !reqSec || !boosterSec || !timeSec || !boostAddons) return;
+
+            if (type === 'companion') {
+                // 陪玩：顯示時數、大神、時間；隱藏加值服務
+                hoursSec.classList.remove('hidden');
+                reqSec.classList.add('hidden');
+                boosterSec.classList.remove('hidden');
+                timeSec.classList.remove('hidden');
+                boostAddons.classList.add('hidden'); // 隱藏加值服務
+                
+                // 重置加值選項避免誤算
+                document.getElementById('optPriority').checked = false;
+                document.getElementById('optStream').checked = false;
+                document.getElementById('streamInputContainer').classList.remove('show');
+
+                updatePricePreview(); 
+            } else {
+                // 代打：隱藏時數、大神、時間；顯示加值服務
+                hoursSec.classList.add('hidden');
+                reqSec.classList.remove('hidden');
+                boosterSec.classList.add('hidden');
+                timeSec.classList.add('hidden');
+                boostAddons.classList.remove('hidden'); // 顯示加值服務
+                
+                selectBooster('','',0);
+            }
         }
+
         function fetchBoosters() {
+            if (currentServiceType === 'boost') return;
             const gid = document.getElementById('gameSelect').value;
-            const section = document.getElementById('boosterSection');
             const grid = document.getElementById('boosterGrid');
-            section.classList.remove('hidden');
             grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8"><i class="fa-solid fa-circle-notch fa-spin text-xl md:text-2xl"></i><br>載入大神中...</div>';
             selectBooster('','',0); 
             if(isMockMode) { setTimeout(() => renderBoosters(getMockBoosters(gid)), 500); return; }
@@ -392,7 +219,10 @@
             const grid = document.getElementById('boosterGrid');
             let html = `<div onclick="selectBooster('','系統分配', 0)" id="booster-random" class="neu-card p-3 md:p-4 text-center cursor-pointer group transition" style="box-shadow: var(--shadow-inset); border-color: var(--accent);"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full mx-auto mb-2 md:mb-3 flex items-center justify-center text-xl md:text-2xl text-gray-500 bg-[#292d3e]" style="box-shadow: var(--shadow-raised);">❓</div><div class="font-bold text-white text-xs md:text-sm">系統分配</div><div class="text-[10px] md:text-xs text-gray-500 mt-1">快速配對</div><div class="absolute top-2 right-2 text-green-500 text-xs"><i class="fa-solid fa-check-circle"></i></div></div>`;
             if(list && list.length > 0) {
-                html += list.map(b => `<div onclick="selectBooster('${b.id}','${b.name}', '${b.price}')" id="booster-${b.id}" class="neu-card p-3 md:p-4 text-center cursor-pointer group hover:-translate-y-1 transition"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full mx-auto mb-2 md:mb-3 overflow-hidden bg-[#292d3e]" style="box-shadow: var(--shadow-inset);">${b.image ? `<img src="${b.image}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-xl text-gray-500">👤</div>`}</div><div class="font-bold text-gray-200 text-xs md:text-sm truncate">${b.name}</div><div class="text-[10px] text-purple-400 mb-1 md:mb-2">${b.rank || '大神'}</div><div class="text-[10px] md:text-xs rounded-lg py-1 px-2 inline-block font-mono text-gray-400" style="box-shadow: var(--shadow-inset);">$${b.price}/H</div></div>`).join('');
+                html += list.map(b => {
+                    const tagsHtml = b.tags && b.tags.length ? b.tags.map(t => `<span class="text-[9px] px-1 bg-gray-700 rounded text-gray-300 mr-1">${t}</span>`).join('') : '';
+                    return `<div onclick="selectBooster('${b.id}','${b.name}', '${b.price}')" id="booster-${b.id}" class="neu-card p-3 md:p-4 text-center cursor-pointer group hover:-translate-y-1 transition"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full mx-auto mb-2 md:mb-3 overflow-hidden bg-[#292d3e]" style="box-shadow: var(--shadow-inset);">${b.image ? `<img src="${b.image}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-xl text-gray-500">👤</div>`}</div><div class="font-bold text-gray-200 text-xs md:text-sm truncate">${b.name}</div><div class="text-[10px] text-purple-400 mb-1">${b.rank || '大神'}</div><div class="mb-1">${tagsHtml}</div><div class="text-[10px] md:text-xs rounded-lg py-1 px-2 inline-block font-mono text-gray-400" style="box-shadow: var(--shadow-inset);">$${b.price}/H</div></div>`;
+                }).join('');
             }
             grid.innerHTML = html;
         }
@@ -407,77 +237,83 @@
             document.getElementById('selectedBoosterPrice').value = cleanPrice || 0;
             updatePricePreview();
         }
-        function changeHours(delta) {
-            currentHours += delta;
-            if(currentHours < 1) currentHours = 1;
-            document.getElementById('displayHours').innerText = currentHours;
-            updatePricePreview();
-        }
+        function changeHours(delta) { currentHours += delta; if(currentHours < 1) currentHours = 1; document.getElementById('displayHours').innerText = currentHours; updatePricePreview(); }
         function updatePricePreview() {
             const price = parseInt(document.getElementById('selectedBoosterPrice').value) || 0;
-            const total = price * currentHours;
             const preview = document.getElementById('pricePreview');
-            const display = document.getElementById('totalPriceDisplay');
-            if(currentServiceType === 'companion' && price > 0) { preview.classList.remove('hidden'); display.innerText = `$${total}`; } else { preview.classList.add('hidden'); }
+            const baseDisplay = document.getElementById('basePriceDisplay');
+            const extraDisplay = document.getElementById('extraFeeDisplay');
+            const discountDisplay = document.getElementById('discountDisplay');
+            const totalDisplay = document.getElementById('totalPriceDisplay');
+            if(currentServiceType === 'companion' && price > 0) { 
+                let baseTotal = price * currentHours;
+                let extraCost = 0;
+                // 注意：陪玩模式下不再計算加值服務費用
+                
+                let finalTotal = baseTotal + extraCost - activeDiscount;
+                if(finalTotal < 0) finalTotal = 0;
+                preview.classList.remove('hidden'); baseDisplay.innerText = `$${baseTotal}`;
+                extraDisplay.classList.add('hidden'); // 隱藏加值顯示
+                if(activeDiscount > 0) { discountDisplay.innerText = `折扣: -$${activeDiscount}`; discountDisplay.classList.remove('hidden'); } else { discountDisplay.classList.add('hidden'); }
+                totalDisplay.innerText = `$${finalTotal}`;
+            } else { preview.classList.add('hidden'); }
         }
-        function getMockBoosters(gid) { if(gid === 'lol') return [{id:'b1', name:'Faker', rank:'菁英', price:'200'}, {id:'b2', name:'Keria', rank:'宗師', price:'180'}]; return []; }
+        function verifyCoupon() {
+            const code = document.getElementById('couponInput').value.trim(); const msg = document.getElementById('couponMsg'); if(!code) return;
+            msg.innerText = "驗證中..."; msg.className = "text-xs mt-1 h-4 text-gray-500";
+            if (isMockMode) { if (code === "DEMO") { activeDiscount = 50; msg.innerText = "有效！-$50"; msg.className = "text-xs mt-1 h-4 text-green-400"; } else { activeDiscount = 0; msg.innerText = "無效"; msg.className = "text-xs mt-1 h-4 text-red-400"; } updatePricePreview(); return; }
+            fetch(GAS_API_URL, {method: 'POST', body: JSON.stringify({action: 'checkCoupon', code: code})}).then(r => r.json()).then(d => {
+                if (d.status === 'success') { activeDiscount = parseInt(d.value) || 0; msg.innerText = `有效！-$${activeDiscount}`; msg.className = "text-xs mt-1 h-4 text-green-400"; } else { activeDiscount = 0; msg.innerText = d.message; msg.className = "text-xs mt-1 h-4 text-red-400"; } updatePricePreview();
+            });
+        }
+        function getMockBoosters(gid) { if(gid === 'lol') return [{id:'b1', name:'Faker', rank:'菁英', price:'200', tags:['#技術流']}, {id:'b2', name:'Keria', rank:'宗師', price:'180', tags:['#可愛']}]; return []; }
         function submitInquiry() {
             const btn = document.querySelector('button[onclick="submitInquiry()"]');
             const orgTxt = btn.innerHTML;
-            let totalPrice = 0;
-            let noteStr = "";
+            let totalPrice = 0; let noteStr = ""; let optionsArr = [];
+            const pRate = Math.round(globalSettings.priority_rate * 100); const sRate = Math.round(globalSettings.stream_rate * 100);
+            
+            // 只有代打才收集加值選項
+            if(currentServiceType === 'boost') {
+                if(document.getElementById('optPriority').checked) optionsArr.push(`加急(+${pRate}%)`);
+                if(document.getElementById('optStream').checked) { const streamDetail = document.getElementById('streamDetail').value; optionsArr.push(`直播(+${sRate}%)${streamDetail ? ': ' + streamDetail : ''}`); }
+            }
+            const optionsStr = optionsArr.join(", ");
+
             if(currentServiceType === 'companion') {
-                const boosterPrice = parseInt(document.getElementById('selectedBoosterPrice').value) || 0;
-                totalPrice = boosterPrice * currentHours;
+                const totalText = document.getElementById('totalPriceDisplay').innerText;
+                totalPrice = parseInt(totalText.replace('$', '')) || 0;
             } else {
                 currentHours = 0; totalPrice = 0;
                 const requestText = document.getElementById('boostRequestInput').value;
                 if(!requestText) { alert("請填寫代打需求描述！"); return; }
-                noteStr = " [代打需求: " + requestText + "]"; 
+                noteStr = " [需求: " + requestText + "]"; 
             }
-            const form = { action: 'createInquiry', game: document.getElementById('gameSelect').value, type: currentServiceType, boosterId: document.getElementById('selectedBoosterId').value, boosterName: document.getElementById('selectedBoosterName').value + noteStr, date: document.getElementById('dateInput').value, time: document.getElementById('timeInput').value, email: document.getElementById('emailInput').value, hours: currentHours, totalPrice: totalPrice };
-            if(!form.game || !form.date || !form.time || !form.email) { alert("請填寫完整欄位！"); return; }
+            let account = "", password = "";
+            if (currentServiceType === 'boost') {
+                account = document.getElementById('gameAccount').value;
+                password = document.getElementById('gamePassword').value;
+                if (!account || !password) { alert("代打請填寫帳號密碼，以便大神登入！"); return; }
+            }
+            if (!document.getElementById('agreeTerms').checked) { alert("請先同意服務條款！"); return; }
+            const form = { action: 'createInquiry', game: document.getElementById('gameSelect').value, type: currentServiceType, boosterId: document.getElementById('selectedBoosterId').value, boosterName: document.getElementById('selectedBoosterName').value + noteStr, date: document.getElementById('dateInput').value, time: currentServiceType === 'companion' ? document.getElementById('timeInput').value : "無(代打)", email: document.getElementById('emailInput').value, hours: currentHours, totalPrice: totalPrice, role: document.getElementById('roleInput').value, options: optionsStr, coupon: document.getElementById('couponInput').value, discount: activeDiscount, account: account, password: password };
+            if(!form.game || !form.date || !form.email) { alert("請填寫完整欄位！"); return; }
+            if(currentServiceType === 'companion' && !form.time) { alert("請選擇時間！"); return; }
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>...'; btn.disabled = true;
             if(isMockMode) { setTimeout(() => { showCreatedModal("DEMO-123"); btn.innerHTML=orgTxt; btn.disabled=false; }, 1000); return; }
             fetch(GAS_API_URL, {method:'POST', body:JSON.stringify(form)}).then(r=>r.json()).then(d=>{ if(d.status==='success') showCreatedModal(d.orderId); else alert(d.message); }).finally(()=>{ btn.innerHTML=orgTxt; btn.disabled=false; });
         }
         function scrollToOrder() { document.getElementById('bookingSection').classList.remove('hidden'); document.getElementById('bookingSection').scrollIntoView({behavior:'smooth'}); }
         function showCreatedModal(orderId) { currentOrderId = orderId; document.getElementById('createdOrderIdText').innerText = orderId; document.getElementById('createdModal').classList.remove('hidden'); document.getElementById('createdModal').classList.add('flex'); setCookie("gcarry_order", orderId, 7); }
-        function copyTextToClipboard(text) {
-            const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; textArea.style.top = "0"; document.body.appendChild(textArea); textArea.focus(); textArea.select();
-            try { const successful = document.execCommand('copy'); document.body.removeChild(textArea); if (successful) return Promise.resolve(); else return Promise.reject("複製失敗"); } catch (err) { document.body.removeChild(textArea); return Promise.reject(err); }
-        }
+        function copyTextToClipboard(text) { const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; textArea.style.top = "0"; document.body.appendChild(textArea); textArea.focus(); textArea.select(); try { const successful = document.execCommand('copy'); document.body.removeChild(textArea); if (successful) return Promise.resolve(); else return Promise.reject("複製失敗"); } catch (err) { document.body.removeChild(textArea); return Promise.reject(err); } }
         function copyCreatedId() { const text = document.getElementById('createdOrderIdText').innerText; copyTextToClipboard(text).then(() => alert("已複製單號！")); }
         function copyBoosterId() { const text = document.getElementById('displayBoosterId').innerText; copyTextToClipboard(text).then(() => alert("已複製 ID")); }
         function goToHubFromCreated() { document.getElementById('createdModal').classList.add('hidden'); document.getElementById('createdModal').classList.remove('flex'); openOrderHub(currentOrderId); }
         function openOrderHub(id="") { document.getElementById('orderHub').classList.remove('hidden'); requestNotificationPermission(); if(id) { document.getElementById('hubSearch').classList.add('hidden'); document.getElementById('hubResult').classList.remove('hidden'); lastKnownStatus = ""; lastMsgCount = 0; checkStatusReal(id, true); } }
         function closeOrderHub() { document.getElementById('orderHub').classList.add('hidden'); }
         function checkStatusInHub() { const id=document.getElementById('hubOrderIdInput').value; if(id) openOrderHub(id); }
-        function checkStatusReal(oid, isFirstLoad = false) {
-            currentOrderId = oid; document.getElementById('displayOrderId').innerText = oid;
-            if(isMockMode || oid.startsWith("DEMO")) { updateHubUI('WaitingPayment', 500, 'HideOnBush'); mockLoadChat(); return; }
-            fetch(GAS_API_URL, {method:'POST', body:JSON.stringify({action:'checkStatus', orderId:oid})}).then(r=>r.json()).then(d=> { 
-                if(d.status==='success'){ 
-                    updateHubUI(d.orderStatus, d.totalPrice, d.boosterId);
-                    if (!isFirstLoad && lastKnownStatus && lastKnownStatus !== d.orderStatus) {
-                        if (d.orderStatus === 'WaitingPayment') sendNotification("尾刀核心", "大神已接單！請前往付款。");
-                        if (d.orderStatus === 'Paid') sendNotification("尾刀核心", "付款已確認！訂單成立。");
-                        if (d.orderStatus === 'Cancelled') sendNotification("尾刀核心", "您的訂單已被取消。");
-                    }
-                    lastKnownStatus = d.orderStatus; loadChatMessages(); 
-                } else if(isFirstLoad) { alert('查無此單'); } 
-            });
-        }
-        function updateHubUI(s, price, boosterId) {
-            const icon = document.getElementById('statusIcon'); const pay = document.getElementById('paymentActionArea'); const priceDisplay = document.getElementById('payAmountDisplay'); const boosterCard = document.getElementById('boosterIdCard'); const displayBooster = document.getElementById('displayBoosterId'); const cancelArea = document.getElementById('userCancelArea'); 
-            pay.classList.add('hidden'); boosterCard.classList.add('hidden'); cancelArea.classList.add('hidden'); 
-            if(price && price > 0) priceDisplay.innerText = `$${price}`; else priceDisplay.innerText = "待管理員報價";
-            icon.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl md:text-3xl"; icon.style.boxShadow = "var(--shadow-inset)"; icon.style.color = ""; icon.classList.remove('text-red-500', 'text-yellow-500', 'text-blue-500', 'text-green-500', 'animate-pulse', 'text-gray-400'); icon.classList.add('text-gray-400');
-            if(s==='Cancelled') { icon.innerHTML='<i class="fa-solid fa-ban"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-red-500'); document.getElementById('statusTitle').innerText="訂單已取消"; return;}
-            if(s==='Inquiry') { icon.innerHTML='<i class="fa-regular fa-clock"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-yellow-500'); document.getElementById('statusTitle').innerText="審核 / 報價中"; cancelArea.classList.remove('hidden'); }
-            if(s==='WaitingPayment') { icon.innerHTML='<i class="fa-solid fa-file-invoice-dollar"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-blue-500', 'animate-pulse'); icon.style.boxShadow = "var(--shadow-raised)"; document.getElementById('statusTitle').innerText="等待付款"; pay.classList.remove('hidden'); cancelArea.classList.remove('hidden'); }
-            if(s==='Paid' || s==='Confirmed') { icon.innerHTML='<i class="fa-solid fa-check"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-green-500'); document.getElementById('statusTitle').innerText="訂單已成立"; if(boosterId) { boosterCard.classList.remove('hidden'); displayBooster.innerText = boosterId; } }
-        }
+        function checkStatusReal(oid, isFirstLoad = false) { currentOrderId = oid; document.getElementById('displayOrderId').innerText = oid; if(isMockMode || oid.startsWith("DEMO")) { updateHubUI('WaitingPayment', 500, 'HideOnBush'); mockLoadChat(); return; } fetch(GAS_API_URL, {method:'POST', body:JSON.stringify({action:'checkStatus', orderId:oid})}).then(r=>r.json()).then(d=> { if(d.status==='success'){ updateHubUI(d.orderStatus, d.totalPrice, d.boosterId); if (!isFirstLoad && lastKnownStatus && lastKnownStatus !== d.orderStatus) { if (d.orderStatus === 'WaitingPayment') sendNotification("尾刀核心", "大神已接單！請前往付款。"); if (d.orderStatus === 'Paid') sendNotification("尾刀核心", "付款已確認！訂單成立。"); if (d.orderStatus === 'Cancelled') sendNotification("尾刀核心", "您的訂單已被取消。"); } lastKnownStatus = d.orderStatus; loadChatMessages(); } else if(isFirstLoad) { alert('查無此單'); } }); }
+        function updateHubUI(s, price, boosterId) { const icon = document.getElementById('statusIcon'); const pay = document.getElementById('paymentActionArea'); const priceDisplay = document.getElementById('payAmountDisplay'); const boosterCard = document.getElementById('boosterIdCard'); const displayBooster = document.getElementById('displayBoosterId'); const cancelArea = document.getElementById('userCancelArea'); pay.classList.add('hidden'); boosterCard.classList.add('hidden'); cancelArea.classList.add('hidden'); if(price && price > 0) priceDisplay.innerText = `$${price}`; else priceDisplay.innerText = "待管理員報價"; icon.className = "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl md:text-3xl"; icon.style.boxShadow = "var(--shadow-inset)"; icon.style.color = ""; icon.classList.remove('text-red-500', 'text-yellow-500', 'text-blue-500', 'text-green-500', 'animate-pulse', 'text-gray-400'); icon.classList.add('text-gray-400'); if(s==='Cancelled') { icon.innerHTML='<i class="fa-solid fa-ban"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-red-500'); document.getElementById('statusTitle').innerText="訂單已取消"; return;} if(s==='Inquiry') { icon.innerHTML='<i class="fa-regular fa-clock"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-yellow-500'); document.getElementById('statusTitle').innerText="審核 / 報價中"; cancelArea.classList.remove('hidden'); } if(s==='WaitingPayment') { icon.innerHTML='<i class="fa-solid fa-file-invoice-dollar"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-blue-500', 'animate-pulse'); icon.style.boxShadow = "var(--shadow-raised)"; document.getElementById('statusTitle').innerText="等待付款"; pay.classList.remove('hidden'); cancelArea.classList.remove('hidden'); } if(s==='Paid' || s==='Confirmed') { icon.innerHTML='<i class="fa-solid fa-check"></i>'; icon.classList.remove('text-gray-400'); icon.classList.add('text-green-500'); document.getElementById('statusTitle').innerText="訂單已成立"; if(boosterId) { boosterCard.classList.remove('hidden'); displayBooster.innerText = boosterId; } } }
         function cancelOrderUser() { if(!confirm("確定要取消此訂單嗎？")) return; fetch(GAS_API_URL, {method:'POST', body:JSON.stringify({action:'userCancelOrder', orderId:currentOrderId})}).then(r=>r.json()).then(d=>{ if(d.status==='success') { alert("訂單已成功取消。"); checkStatusReal(currentOrderId); } else alert("取消失敗：" + d.message); }); }
         function submitPayment() { fetch(GAS_API_URL, {method:'POST', body:JSON.stringify({action:'submitPayment', orderId:currentOrderId, cardId:document.getElementById('payCard').value, cardPwd:document.getElementById('payPwd').value})}).then(r=>r.json()).then(d=>{ if(d.status==='success'){ alert('付款已送出'); checkStatusReal(currentOrderId, true); }}); }
         function loadChatMessages() { fetch(GAS_API_URL, {method:'POST', body:JSON.stringify({action:'getMessages', orderId:currentOrderId})}).then(r=>r.json()).then(d=>{ renderChat(d.messages); if (lastMsgCount > 0 && d.messages.length > lastMsgCount) { const lastMsg = d.messages[d.messages.length - 1]; if (lastMsg.sender === 'Admin') sendNotification("新訊息", "客服/大神： " + lastMsg.text); } lastMsgCount = d.messages.length; }); }
@@ -487,7 +323,6 @@
         function setCookie(n,v,d){const e=new Date();e.setTime(e.getTime()+(d*86400000));document.cookie=n+"="+v+";path=/;expires="+e.toUTCString();}
         function getCookie(n){const m=n+"=";const c=document.cookie.split(';');for(let i=0;i<c.length;i++){let x=c[i];while(x.charAt(0)==' ')x=x.substring(1);if(x.indexOf(m)==0)return x.substring(m.length,x.length);}return null;}
         function checkCookieForOrder(){const id=getCookie("gcarry_order"); if(id) document.getElementById('navBtnText').innerText = `查詢 (${id})`;}
-        
         setInterval(()=>{ if(!document.getElementById('orderHub').classList.contains('hidden') && currentOrderId && !isMockMode && !currentOrderId.startsWith("DEMO")) { checkStatusReal(currentOrderId, false); } }, 10000); 
     </script>
 </body>
