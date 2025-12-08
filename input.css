@@ -10,15 +10,16 @@
     --text-main: #e0e6ed;
     --text-sub: #94a3b8;
     --accent: #a855f7;
-    --shadow-raised: 6px 6px 12px #212432, -6px -6px 12px #31364a;
+    /* 陰影優化：保留深邃感 */
+    --shadow-raised: 8px 8px 16px #212432, -8px -8px 16px #31364a;
     --shadow-inset: inset 6px 6px 12px #212432, inset -6px -6px 12px #31364a;
+    /* 絲滑曲線：模擬物理慣性的 Easing (不耗效能，純數學計算) */
+    --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  @media (max-width: 768px) {
-    :root {
-      --shadow-raised: 3px 3px 6px #212432, -3px -3px 6px #31364a;
-      --shadow-inset: inset 3px 3px 6px #212432, inset -3px -3px 6px #31364a;
-    }
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
@@ -26,157 +27,191 @@
     background-color: var(--bg-base);
     color: var(--text-main);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
-  /* 隱藏滾動條但保留功能 */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  /* 優化：指定 transition 屬性，避免監聽所有變化 */
+  ::-webkit-calendar-picker-indicator { 
+    filter: invert(0.8); 
+    cursor: pointer; 
+    opacity: 0.6; 
+    transition: opacity 0.3s ease; 
   }
-  
-  /* 日期選擇器圖標反白 */
-  ::-webkit-calendar-picker-indicator {
-    filter: invert(0.8);
-    cursor: pointer;
-    opacity: 0.6;
-  }
-
-  select option {
-    background-color: #292d3e;
-    color: #e0e6ed;
-  }
+  ::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+  select option { background-color: #292d3e; color: #e0e6ed; }
 }
 
 @layer components {
+  /* 基礎卡片：移除 box-shadow 的 will-change 以節省記憶體 */
   .neu-card {
     background-color: var(--bg-base);
     border-radius: 1.5rem;
     box-shadow: var(--shadow-raised);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    /* 效能優化：只對變形和陰影做過渡 */
+    transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
+    /* 僅提示瀏覽器優化變形，這是最廉價的動畫屬性 */
+    will-change: transform; 
   }
 
+  /* 按鈕 */
   .neu-btn {
     background-color: var(--bg-base);
     color: var(--text-main);
     border-radius: 1rem;
     box-shadow: var(--shadow-raised);
     font-weight: 700;
-    transition: all 0.2s ease;
+    /* 效能優化：明確指定動畫屬性 */
+    transition: transform 0.3s var(--ease-elastic), box-shadow 0.3s var(--ease-elastic), color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.05);
     cursor: pointer;
-    touch-action: manipulation;
+    touch-action: manipulation; /* 提升觸控響應速度 */
+    position: relative;
+    overflow: hidden;
   }
 
-  .neu-btn:hover {
+  .neu-btn:hover:not(:disabled) {
     color: var(--accent);
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 10px 10px 20px #212432, -10px -10px 20px #31364a;
   }
 
-  .neu-btn:active {
+  .neu-btn:active:not(:disabled) {
     box-shadow: var(--shadow-inset);
-    transform: translateY(0);
+    transform: translateY(1px) scale(0.98);
     color: var(--accent);
   }
 
-  .neu-btn-primary {
-    color: var(--accent);
-  }
-
+  .neu-btn-primary { color: var(--accent); }
+  
   .neu-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: grayscale(0.8);
   }
 
+  /* 輸入框 */
   .neu-input {
     background-color: var(--bg-base);
     border-radius: 0.75rem;
     box-shadow: var(--shadow-inset);
-    border: none;
+    border: 1px solid transparent;
     color: var(--text-main);
-    transition: all 0.3s ease;
+    /* 效能優化 */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
   }
 
   .neu-input:focus {
     outline: none;
-    box-shadow: inset 3px 3px 6px #212432, inset -3px -3px 6px #31364a, 0 0 0 2px var(--accent);
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: inset 4px 4px 8px #212432, inset -4px -4px 8px #31364a, 0 0 15px rgba(168, 85, 247, 0.1);
+    transform: scale(1.01);
   }
 
+  /* 選項卡 */
   .neu-radio-label {
     cursor: pointer;
     border-radius: 1rem;
     box-shadow: var(--shadow-raised);
-    transition: all 0.2s;
+    transition: transform 0.3s var(--ease-elastic), box-shadow 0.3s ease, opacity 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.02);
+    opacity: 0.7;
   }
+  
+  .neu-radio-label:hover { opacity: 1; transform: translateY(-2px); }
 
   input:checked + .neu-radio-label {
     box-shadow: var(--shadow-inset);
     color: var(--accent);
+    opacity: 1;
+    transform: translateY(0);
+    border-color: rgba(168, 85, 247, 0.2);
   }
 
+  /* Checkbox */
   .neu-checkbox {
     appearance: none;
-    width: 1.2em;
-    height: 1.2em;
+    width: 1.3em;
+    height: 1.3em;
     background: var(--bg-base);
     box-shadow: var(--shadow-inset);
-    border-radius: 0.25rem;
+    border-radius: 0.35rem;
     display: inline-grid;
     place-content: center;
-    margin-right: 0.5em;
+    margin-right: 0.6em;
     cursor: pointer;
+    transition: background-color 0.2s ease;
   }
 
   .neu-checkbox::before {
     content: "";
-    width: 0.65em;
-    height: 0.65em;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
+    width: 0.75em;
+    height: 0.75em;
+    transform: scale(0) rotate(-45deg);
+    transition: transform 0.4s var(--ease-elastic); /* 保持勾選時的彈跳感 */
     box-shadow: inset 1em 1em var(--accent);
-    border-radius: 0.15rem;
+    border-radius: 0.2rem;
   }
 
-  .neu-checkbox:checked::before {
-    transform: scale(1);
-  }
+  .neu-checkbox:checked::before { transform: scale(1) rotate(0deg); }
 }
 
 @layer utilities {
-  .text-glow {
-    text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-  }
+  .text-glow { text-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
 
-  .animate-fade-in {
-    animation: fade-in-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
+  /* 進場動畫：Transform 和 Opacity 是瀏覽器處理最快的屬性 */
+  .animate-fade-in-up { animation: fadeInUp 0.8s var(--ease-smooth) forwards; opacity: 0; }
+  .animate-pop-in { animation: popIn 0.5s var(--ease-elastic) forwards; opacity: 0; }
+  .animate-slide-in-right { animation: slideInRight 0.6s var(--ease-smooth) forwards; opacity: 0; }
+  
+  .stagger-1 { animation-delay: 50ms; }
+  .stagger-2 { animation-delay: 100ms; }
+  .stagger-3 { animation-delay: 150ms; }
+  .stagger-4 { animation-delay: 200ms; }
+  .stagger-5 { animation-delay: 250ms; }
 
   .height-transition {
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    /* 這裡必須用 max-height，但我們限制時間不要太長 */
+    transition: max-height 0.4s var(--ease-smooth), opacity 0.3s ease;
     max-height: 0;
     opacity: 0;
     overflow: hidden;
   }
 
   .height-transition.show {
-    max-height: 100px;
+    max-height: 120px;
     opacity: 1;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  
+  .backdrop-blur-custom {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Keyframes: 保持簡單，只動 transform 和 opacity */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate3d(0, 30px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  70% { transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translate3d(30px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.fa-spin { animation: fa-spin 1.5s infinite linear; }
